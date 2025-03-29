@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
-
+import mongoengine
+import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, "webappexample", "templates")
@@ -126,10 +127,11 @@ DATABASES = {
 }
 
 # MongoDB Atlas Configuration
-import mongoengine
 
-MONGO_DB_NAME = "your_database_name"
-MONGO_ATLAS_CONN_STRING = "mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority"
+MONGO_DB_NAME = "GoSustainYourself"
+MONGO_ATLAS_CONN_STRING = "mongodb+srv://Lyrics:lyrikal1216S!@gosustainyourself.tsdvv.mongodb.net/"
+
+
 
 mongoengine.connect(
     db=MONGO_DB_NAME,

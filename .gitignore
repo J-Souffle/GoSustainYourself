@@ -1,3 +1,13 @@
+<<<<<<< Updated upstream
+
+
+=======
 .env
 db.sqlite3
 *.pyc
+recycle_computer_vision\data
+>>>>>>> Stashed changes
+/recycle_computer_vision/data
+/recycle_computer_vision/data
+/recycle_computer_vision/data
+/recycle_computer_vision/data/garbage_classification
