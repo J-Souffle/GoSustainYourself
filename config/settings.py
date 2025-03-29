@@ -65,11 +65,19 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'gosustainyourself',       # Database name from Step 2
+        'USER': 'root',             # MySQL username (or 'root' if no separate user)
+        'PASSWORD': 'your_password',       # MySQL password
+        'HOST': 'localhost',               # Usually 'localhost' or '127.0.0.1'
+        'PORT': '3306',                    # Default MySQL port
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",  # Avoid MySQL warnings
+        },
     }
 }
+
 # import mongoengine
 
 # MONGO_DB_NAME = "your_database_name"
@@ -148,4 +156,5 @@ ALLOWED_HOSTS = [
 ]
 
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+
 
