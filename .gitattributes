@@ -1,2 +1,3 @@
 recycle_computer_vision/data/archive.zip filter=lfs diff=lfs merge=lfs -text
 recycle_computer_vision/xception_garbage_classifier.pth filter=lfs diff=lfs merge=lfs -text
+recycle_computer_vision/data/xception_garbage_classifier.pth filter=lfs diff=lfs merge=lfs -text
