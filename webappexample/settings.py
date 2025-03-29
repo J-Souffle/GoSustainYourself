@@ -67,6 +67,15 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+# import mongoengine
+
+# MONGO_DB_NAME = "your_database_name"
+# MONGO_ATLAS_CONN_STRING = "mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority"
+
+# mongoengine.connect(
+#     db=MONGO_DB_NAME,
+#     host=MONGO_ATLAS_CONN_STRING
+# )
 
 
 # Password validation
@@ -115,23 +124,3 @@ AUTH0_CALLBACK_URL = "http://localhost:3000/callback"
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-
-# Standard Django SQL database (for admin/auth if needed)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# MongoDB Atlas Configuration
-import mongoengine
-
-MONGO_DB_NAME = "your_database_name"
-MONGO_ATLAS_CONN_STRING = "mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority"
-
-mongoengine.connect(
-    db=MONGO_DB_NAME,
-    host=MONGO_ATLAS_CONN_STRING
-)
