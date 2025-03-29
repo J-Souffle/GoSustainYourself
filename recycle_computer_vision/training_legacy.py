@@ -167,7 +167,6 @@ if __name__ == '__main__':
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
-
     model = SimpleCNN().to(device)
     # Use CrossEntropyLoss for multi-class classification
     criterion = nn.CrossEntropyLoss()

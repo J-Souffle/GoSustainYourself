@@ -5,16 +5,16 @@ import mongoengine
 import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATE_DIR = os.path.join(BASE_DIR, "webappexample", "templates")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "gosustainyourself", "templates")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "auth0-webappexample-k0n4a#6cqu9=co$_bu^^sd@&^8#*%ukg3z4ku!lj&j)%^@cx8%"
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key-for-development')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.staticfiles",
+    'gosustainyourself.apps.GosustainyourselfConfig',
 ]
 
 MIDDLEWARE = [
@@ -36,9 +38,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
 
-ROOT_URLCONF = "webappexample.urls"
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -56,7 +59,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "webappexample.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application" 
 
 
 # Database
@@ -120,8 +123,30 @@ if ENV_FILE:
 AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
 AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
 AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+print("AUTH0_DOMAIN:", AUTH0_DOMAIN)
+print("AUTH0_CLIENT_ID:", AUTH0_CLIENT_ID)
+print("AUTH0_CLIENT_SECRET:", AUTH0_CLIENT_SECRET)
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # For development only
+SESSION_COOKIE_SAMESITE = 'Lax'  # Helps with Auth0 redirects
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = True   # Change to True in production
+CSRF_COOKIE_SECURE = True     # Change to True in production
+AUTH0_CALLBACK_URL = "http://localhost:8000/callback/" 
+AUTH0_SUCCESS_URL = "/"
+LOGIN_URL = '/login'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 
-AUTH0_CALLBACK_URL = "http://localhost:3000/callback"
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Explicit session engine
+SESSION_COOKIE_NAME = "gosustain_session"  # Unique cookie name
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True 
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
+
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+
