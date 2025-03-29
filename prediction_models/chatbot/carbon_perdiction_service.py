@@ -31,7 +31,8 @@ class CarbonPredictionService:
             raise ValueError("GEMINI_API_KEY not found in .env file")
         
         genai.configure(api_key=api_key)
-        self.model_gemini = genai.GenerativeModel('gemini-1.0-pro')
+        # Use the correct Gemini model
+        self.model_gemini = genai.GenerativeModel('gemini-2.0-flash')
         
         self._load_and_train_model()
         
@@ -106,7 +107,7 @@ class CarbonPredictionService:
         self.rf_model.fit(X_train, y_train)
         self.hgb_model.fit(X_train, y_train)
         
-    def predict_carbon_emission(self, user_data: Dict[str, Any]) -> Dict[str, Union[float, str]]:
+    def predict_carbon_emission(self, user_data: Dict[str, Any]) -> Dict[str, Union[float, Dict[str, float], str]]:
         # Prepare input
         user_df = pd.DataFrame([user_data])
         user_encoded = pd.get_dummies(user_df, drop_first=True)
@@ -153,22 +154,20 @@ class CarbonPredictionService:
                 "Focus on the areas where they could make the biggest impact based on their current habits. "
                 "Format the response in bullet points and keep suggestions practical and achievable."
             )
-            
+        
             response = self.model_gemini.generate_content(
                 prompt,
-                generation_config={
-                    "temperature": 0.7,
-                    "top_p": 0.8,
-                    "top_k": 40,
-                    "max_output_tokens": 1024,
-                }
-            )
-            
+            generation_config={
+                "temperature": 0.7,
+                "top_p": 0.8,
+                "top_k": 40,
+                "max_output_tokens": 1024,
+            }
+        )
+        
             return response.text if response.text else "Unable to generate suggestions."
-            
         except Exception as e:
             return f"Unable to generate suggestions. Please try again later. Error: {str(e)}"
-
 if __name__ == "__main__":
     # Test data
     test_data = {
@@ -197,7 +196,8 @@ if __name__ == "__main__":
     result = service.predict_carbon_emission(test_data)
     print(f"\nPredicted Carbon Emission: {result['prediction']:.2f}")
     print("\nIndividual Model Predictions:")
-    for model, pred in result['model_predictions'].items():
-        print(f"{model}: {pred:.2f}")
+    if isinstance(result['model_predictions'], dict):
+        for model, pred in result['model_predictions'].items():
+            print(f"{model}: {pred:.2f}")
     print("\nSuggestions:")
     print(result['suggestions'])
