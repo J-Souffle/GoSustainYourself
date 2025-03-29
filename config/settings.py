@@ -38,6 +38,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     
 ]
 
@@ -131,8 +134,14 @@ SESSION_COOKIE_SAMESITE = 'Lax'  # Helps with Auth0 redirects
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = True   # Change to True in production
 CSRF_COOKIE_SECURE = True     # Change to True in production
-AUTH0_CALLBACK_URL = "http://localhost:8000/callback/" 
-AUTH0_SUCCESS_URL = "/"
+
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = None
+CSRF_COOKIE_SAMESITE = None
+
+AUTH0_CALLBACK_URL = "http://127.0.0.1:8000/callback/" 
+AUTH0_SUCCESS_URL = "/login"
 LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'

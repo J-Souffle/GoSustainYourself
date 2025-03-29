@@ -2,7 +2,7 @@ import os
 import torch
 from torchvision import transforms
 from PIL import Image
-from training import XceptionClassifier, predict_image, GROUP_MAPPING
+from .training import XceptionClassifier, predict_image, GROUP_MAPPING
 
 # Cache the loaded model so that we don't have to reload it on every call.
 _model = None

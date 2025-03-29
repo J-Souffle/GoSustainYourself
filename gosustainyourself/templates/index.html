@@ -13,10 +13,10 @@
     <div class="auth-container">
         {% if user.is_authenticated %}
             <h2>Welcome!</h2>
-            <a href="/logout" class="btn btn-danger">Logout</a>
+            <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
         {% else %}
             <h2>Welcome Guest</h2>
-            <a href="/login" class="btn btn-primary">Login with Auth0</a>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login with Auth0</a>
         {% endif %}
     </div>
 </body>
