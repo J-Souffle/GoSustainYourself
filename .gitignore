@@ -1,4 +1,5 @@
 .env
 db.sqlite3
 *.pyc
-recycle_computer_vision\data
+recycle_computer_vision/data
+recycle_computer_vision/xception_garbage_classifier.pth
