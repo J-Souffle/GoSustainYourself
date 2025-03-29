@@ -5,7 +5,7 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error  #
 from sklearn.ensemble import HistGradientBoostingRegressor  # type: ignore
 
 # ------------------ Data Loading & Pre-processing ------------------
-input_file = "/Users/a17937/Desktop/HooHacks2025/Carbon Emission.txt"
+input_file = "prediction_models/carbon_emission_data/Carbon Emission.txt"
 df = pd.read_csv(input_file, delimiter="\t")
 df["CarbonEmission"] = pd.to_numeric(df["CarbonEmission"], errors="coerce")
 

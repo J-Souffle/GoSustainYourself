@@ -6,7 +6,7 @@ from xgboost import XGBRegressor
 from sklearn.tree import DecisionTreeRegressor  #type: ignore 
 
 # ------------------ Data Loading & Pre-processing ------------------
-input_file = "/Users/a17937/Desktop/HooHacks2025/Carbon Emission.txt"
+input_file = "prediction_models/carbon_emission_data/Carbon Emission.txt"
 df = pd.read_csv(input_file, delimiter="\t")
 df["CarbonEmission"] = pd.to_numeric(df["CarbonEmission"], errors="coerce")
 

@@ -6,7 +6,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from sklearn.preprocessing import MinMaxScaler #type: ignroe # Changed from StandardScaler  
 
 # Load the data (assuming tab-separated values)
-input_file = "/Users/a17937/Desktop/HooHacks2025/Carbon Emission.txt"
+input_file = "prediction_models/carbon_emission_data/Carbon Emission.txt"
 df = pd.read_csv(input_file, delimiter="\t")
 
 # Convert CarbonEmission to numeric (invalid parsing becomes NaN)

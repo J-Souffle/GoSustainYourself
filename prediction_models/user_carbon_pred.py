@@ -32,7 +32,7 @@ def get_valid_input(prompt: str, valid_options: List[str]) -> str:
 # ----------- DATA PREPARATION --------------
 ##############################################
 # Load dataset.
-df = pd.read_csv("/Users/a17937/Desktop/HooHacks2025/Carbon Emission.txt", delimiter="\t")
+df = pd.read_csv("prediction_models/carbon_emission_data/Carbon Emission.txt", delimiter="\t")
 df["CarbonEmission"] = pd.to_numeric(df["CarbonEmission"], errors="coerce")
 
 # Specify features.
