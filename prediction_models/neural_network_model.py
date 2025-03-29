@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torch import nn
 from torch.utils.data import TensorDataset, DataLoader
-from sklearn.preprocessing import MinMaxScaler #type: ignroe # Changed from StandardScaler  
+from sklearn.preprocessing import MinMaxScaler #type: ignore # Changed from StandardScaler  
 
 # Load the data (assuming tab-separated values)
 input_file = "prediction_models/carbon_emission_data/Carbon Emission.txt"
@@ -91,7 +91,7 @@ y_true = y_test_tensor.cpu().numpy()
 y_pred = predictions.cpu().numpy()
 
 # Import metrics from scikit-learn
-from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error #type: ignore
 
 r2 = r2_score(y_true, y_pred)
 mae = mean_absolute_error(y_true, y_pred)

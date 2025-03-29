@@ -1,6 +1,6 @@
 import pandas as pd  # type: ignore
 import numpy as np  # type: ignore
-from sklearn.preprocessing import StandardScaler #type: ignroe
+from sklearn.preprocessing import StandardScaler #type: ignore
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error  # type: ignore
 from sklearn.ensemble import HistGradientBoostingRegressor  # type: ignore
 
