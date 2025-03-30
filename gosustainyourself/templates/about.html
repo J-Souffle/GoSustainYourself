@@ -1,5 +1,146 @@
 {% extends 'layout.html' %}
+{% load static %} 
+
+{% block title %}About Our Sustainability Platform{% endblock %}
 
 {% block hero_content %}
-    <h1>{% block title %} This Django app uses databases to manage a list of user inputted items! {% endblock %}</h1>
+    <h1 class="text-light display-4 animate__animated animate__fadeInDown">
+        About Go Sustain Yourself
+    </h1>
+    <p class="text-light lead animate__animated animate__fadeInUp">
+        Empowering individuals to make sustainable choices through AI-powered tools
+    </p>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="mb-4">Our Mission</h2>
+            <p class="lead">
+                Go Sustain Yourself was created to bridge the gap between environmental awareness and actionable 
+                sustainability practices. Our platform combines machine learning with practical tools to help 
+                users understand and reduce their ecological footprint.
+            </p>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-lg-6">
+            <h3 class="mb-4">Our Features</h3>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Carbon Footprint Calculator</h5>
+                    <p class="card-text">
+                        Our advanced algorithm analyzes your lifestyle choices to estimate your carbon emissions 
+                        and provide personalized reduction strategies.
+                    </p>
+                </div>
+            </div>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Recyclability Classifier</h5>
+                    <p class="card-text">
+                        Upload images of items to instantly determine if they're recyclable and learn proper 
+                        disposal methods.
+                    </p>
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Sustainability Resources</h5>
+                    <p class="card-text">
+                        Access our curated database of eco-friendly tips, local recycling centers, and 
+                        sustainable product alternatives.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <h3 class="mb-4">The Technology</h3>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <p>
+                        Our platform leverages:
+                    </p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Django for robust backend functionality</li>
+                        <li class="list-group-item">Google's Gemini AI for intelligent suggestions</li>
+                        <li class="list-group-item">Computer vision for image recognition</li>
+                        <li class="list-group-item">Geolocation APIs for local recycling resources</li>
+                        <li class="list-group-item">Five Machine Learning model with combined of 95%+ accuracy</li>
+                        <li class="list-group-item">Responsive Bootstrap design for all devices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5">Meet The Team</h2>
+        </div>
+        
+        <!-- Team Member 1 -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/dylan.jpg' %}" class="card-img-top" alt="Team Member">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Dylan Wang</h5>
+                    <p class="text-muted"> Computer Science </p>
+                    <p class="card-text">
+                        Eddie's Son
+                    </p>
+                    <a href="https://www.linkedin.com/in/yilinwang762/" class="btn btn-outline-success btn-sm">Linkdin</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Team Member 2 -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/Kuthan.jpg' %}" class="card-img-top" alt="Team Member">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Kuthan Kukrer</h5>
+                    <p class="text-muted">Computer Sciecnce and ECE </p>
+                    <p class="card-text">
+                        江湖人称(Sid)
+                    </p>
+                    <a href="https://www.linkedin.com/in/kuthan-kukrer-aa6460264/" class="btn btn-outline-success btn-sm">Linkdin</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Team Member 3 -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/Josh.jpg' %}" class="card-img-top" alt="Team Member">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Josh Cancio</h5>
+                    <p class="text-muted">Computer Science</p>
+                    <p class="card-text">
+                       Eddie's son's friend
+                    </p>
+                    <a href="https://www.linkedin.com/in/jdcancio/" class="btn btn-outline-success btn-sm">Personal Website</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Team Member 4 -->
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/Eddie.jpeg' %}" class="card-img-top" alt="Team Member">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Eddie Xiao</h5>
+                    <p class="text-muted">Computer Science and Economic</p>
+                    <p class="card-text">
+                        Dylan's Father
+                    </p>
+                    <a href="https://eddiex-2021.github.io/personalPortfolio/" class="btn btn-outline-success btn-sm">Personal Website</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
