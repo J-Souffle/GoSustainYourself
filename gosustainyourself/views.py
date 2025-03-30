@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from tempfile import NamedTemporaryFile
 from prediction_models.carbon_prediction_service import CarbonPredictionService
 from recycle_computer_vision.recycle_predictor import predict_recyclable_image
+from recycle_computer_vision import gemini_response
 from django.contrib.auth import get_user_model, login as django_login
 
 oauth = OAuth()
@@ -95,16 +96,12 @@ def predict_carbon(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 @login_required
-def predict_recyclable(request):
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
-    
-    try:
-        data = json.loads(request.body)
-        result = carbon_predictor.predict_recyclable(data)
-        return JsonResponse(result)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+def predict_recycle_view(request):
+    """
+    Renders the HTML page that lets a user upload an image
+    to predict whether it is recyclable.
+    """
+    return render(request, "predict_recycle.html", context={"session": request.session.get("user")})
 
 @login_required
 @csrf_exempt
@@ -115,7 +112,6 @@ def predict_recycle(request):
     if 'file' not in request.FILES:
         return JsonResponse({"error": "No file uploaded"}, status=400)
     
-    # Save the uploaded file to a temporary location.
     uploaded_file = request.FILES['file']
     with NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as tmp:
         tmp.write(uploaded_file.read())
@@ -123,20 +119,16 @@ def predict_recycle(request):
     
     try:
         result = predict_recyclable_image(tmp_path)
-        # Optionally, remove the temporary file after prediction.
+        # Get the Gemini explanation
+        explanation = gemini_response.get_gemini_explanation(result, tmp_path)
+        # Add the explanation to the result
+        result["explanation"] = explanation
         os.remove(tmp_path)
         return JsonResponse(result)
     except Exception as e:
         os.remove(tmp_path)
         return JsonResponse({"error": str(e)}, status=400)
 
-@login_required
-def recycle_upload(request):
-    """
-    Renders the HTML page that lets a user upload an image
-    to predict whether it is recyclable.
-    """
-    return render(request, "predict_recycle.html")
 
 def home(request):
     """
