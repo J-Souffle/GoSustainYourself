@@ -1,16 +1,30 @@
-FROM python:3.9
+FROM python:3.11-slim
 
-WORKDIR /home/app
+# Set environment variables to prevent Python from writing pyc files and buffering stdout/stderr.
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-#If we add the requirements and install dependencies first, docker can use cache if requirements don't change
-ADD requirements.txt /home/app
-RUN pip install --no-cache-dir -r requirements.txt
+# Set work directory
+WORKDIR /app
 
-ADD . /home/app
+# Install system dependencies (if needed)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Migrate the database
-RUN python manage.py migrate
+# Copy requirements.txt and install dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-CMD python manage.py runserver 0.0.0.0:3000
+# Copy project code
+COPY . /app/
 
-EXPOSE 3000
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Expose the port that Google Cloud will route to.
+EXPOSE 8080
+
+# Use Gunicorn to serve the app.
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080"]
