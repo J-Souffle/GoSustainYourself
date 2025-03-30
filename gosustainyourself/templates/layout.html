@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Sustainable AI Energy Portal{% endblock %}</title>
+    <title>Go Sustain Yourself</title>
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <!-- Optional: Animate.css for subtle effects -->
@@ -42,9 +42,8 @@
     {% block navbar %}
       <nav class="navbar navbar-expand-lg navbar-dark shadow-lg">
         <div class="container">
-          <a class="navbar-brand" href="{% url 'home' %}">Energy Portal</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#navbarSupportedContent">
+          <a class="navbar-brand" href="{% url 'home' %}">Go Sustain Yourself</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -52,9 +51,10 @@
               <li class="nav-item"><a class="nav-link active" href="{% url 'home' %}">Home</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
               {% if user.is_authenticated %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'predict_recycle_page' %}">Predict Recyclability</a>
-                </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'carbon_footprint' %}">Carbon Footprint</a>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'predict_recycle_page' %}">Recyclability Check</a></li>
               {% endif %}
             </ul>
             <ul class="navbar-nav ms-auto">
@@ -83,11 +83,16 @@
           <div class="container hero-content">
             {% block hero_content %}
               <h1 class="text-light display-4 animate__animated animate__fadeInDown">
-                Welcome to the Energy Portal
+                Welcome to Go Sustain Yourself!
               </h1>
-              <p class="text-light lead animate__animated animate__fadeInUp">
-                Optimizing energy consumption for a sustainable future.
-              </p>
+              <div class="text-light lead animate__animated animate__fadeInUp" style="max-width: 800px; margin: 0 auto;">
+                <ul class="list-unstyled text-start" style="display: inline-block;">
+                  <li class="mb-2">• Predict your carbon footprint based on personal habits</li>
+                  <li class="mb-2">• Get personalized sustainability plans to reduce energy use</li>
+                  <li class="mb-2">• Identify recyclable items using image recognition</li>
+                  <li class="mb-2">• Locate nearby recycling facilities with our interactive map</li>
+                </ul>
+              </div>
             {% endblock hero_content %}
           </div>
         </div>

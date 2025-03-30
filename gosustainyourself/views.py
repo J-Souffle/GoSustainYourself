@@ -82,9 +82,16 @@ def logout(request):
             quote_via=quote_plus,
         )
     )
+@login_required
+def predict_carbon_view(request):
+    """Render the carbon prediction form"""
+    return render(request, "predict_carbon.html", context={
+        "session": request.session.get("user")
+    })
 
 @login_required
 def predict_carbon(request):
+    """Handle the form submission"""
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
     
@@ -94,7 +101,7 @@ def predict_carbon(request):
         return JsonResponse(result)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-
+        
 @login_required
 def predict_recycle_view(request):
     """

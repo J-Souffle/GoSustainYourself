@@ -3,7 +3,6 @@ asgiref==3.8.1
 cachetools==5.5.2
 certifi==2025.1.31
 charset-normalizer==3.4.1
-Django==5.1.7
 dotenv==0.9.9
 filelock==3.18.0
 fsspec==2025.3.0
@@ -34,7 +33,6 @@ pydantic==2.11.1
 pydantic_core==2.33.0
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
-python-dotenv==1.1.0
 pytz==2025.2
 requests==2.32.3
 rsa==4.9
@@ -60,3 +58,5 @@ mongoengine==0.10.6
 django-environ==0.8.1
 django_bootstrap5==0.2.0
 authlib==0.15.0
+timm==0.6.13
+python-dotenv==1.0.0
