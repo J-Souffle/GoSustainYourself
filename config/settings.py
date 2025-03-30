@@ -76,13 +76,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-<<<<<<< HEAD
-        'NAME': 'gosustainyourself',
-        'USER': 'root',       # Same as in ALTER USER
-        'PASSWORD': 'HoosHack1234!',  # Updated password
-        'HOST': 'localhost',
-        'PORT': '3306',
-=======
+
+
         'NAME': 'gosustainyourself',       # Database name from Step 2
         'USER': 'root',             # MySQL username (or 'root' if no separate user)
         'PASSWORD': 'your_password',       # MySQL password
@@ -91,7 +86,6 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",  # Avoid MySQL warnings
         },
->>>>>>> 0c7caf7acec1fbe339ec77bb77b5c25a6778120d
     }
 }
 
