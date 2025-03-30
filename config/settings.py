@@ -25,6 +25,13 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
 ]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'gosustainyourself.onrender.com',  # Render's default domain
+    'gosustainyourself.com',              # Your custom domain
+    'www.gosustainyourself.com'
+]
 
 # Application definition
 
@@ -50,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     
 ]
 
@@ -127,7 +135,7 @@ if ENV_FILE:
 AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
 AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
 AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
-AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://127.0.0.1:8000/callback/")
+AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://localhost:3000/callback/")
 print("AUTH0_DOMAIN:", AUTH0_DOMAIN)
 print("AUTH0_CLIENT_ID:", AUTH0_CLIENT_ID)
 print("AUTH0_CLIENT_SECRET:", AUTH0_CLIENT_SECRET)
@@ -153,10 +161,17 @@ LOGIN_REDIRECT_URL = '/'
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Explicit session engine
 SESSION_COOKIE_NAME = "gosustain_session"  # Unique cookie name
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+
+
+from dotenv import load_dotenv
+load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 
