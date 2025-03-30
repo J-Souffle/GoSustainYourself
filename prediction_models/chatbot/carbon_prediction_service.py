@@ -1,10 +1,10 @@
 import os
-import pandas as pd #type: ignore
+import pandas as pd  # type: ignore
 import numpy as np
 import torch
 from typing import Dict, Union, Any
-from sklearn.preprocessing import StandardScaler #type: ignore
-from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor #type: ignore
+from sklearn.preprocessing import StandardScaler  # type: ignore
+from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor  # type: ignore
 import xgboost as xgb
 import lightgbm as lgb
 import google.generativeai as genai
@@ -167,92 +167,18 @@ class CarbonPredictionService:
 
             # Check if the response contains valid suggestions
             if response.text and len(response.text.strip()) > 0:
-                return response.text
+                suggestions = response.text.strip()
+                formatted_suggestions = "\n".join(
+                    [f"* {line.strip()}" for line in suggestions.split("\n") if line.strip()]
+                )
+                return formatted_suggestions
             else:
                 raise ValueError("Empty or invalid response from Gemini API.")
         except Exception as e:
             # Fallback suggestions in case of an error or empty response
             print(f"Error generating suggestions: {str(e)}")
             return (
-                "Here are 3 general suggestions to help you reduce your carbon footprint:\n\n"
-                "* **Reduce Meat Consumption:** Incorporate more plant-based meals into your diet to lower emissions from livestock farming.\n"
-                "* **Optimize Energy Use:** Use energy-efficient appliances, switch to LED lighting, and unplug devices when not in use.\n"
-                "* **Minimize Waste:** Recycle, compost food scraps, and reduce the use of single-use plastics."
+                "*Reduce Meat Consumption:** Incorporate more plant-based meals into your diet to lower emissions from livestock farming.\n"
+                "*Optimize Energy Use:** Use energy-efficient appliances, switch to LED lighting, and unplug devices when not in use.\n"
+                "*Minimize Waste:** Recycle, compost food scraps, and reduce the use of single-use plastics."
             )
-
-
-def get_valid_numeric_input(prompt: str) -> float:
-    """
-    Prompt the user for numeric input and validate it.
-    If the input is not a valid number, remind the user and prompt again.
-    """
-    while True:
-        user_input = input(prompt).strip()
-        try:
-            # Try to convert the input to a float
-            return float(user_input)
-        except ValueError:
-            print("Invalid input. Please enter a valid number.")
-
-
-def get_user_input() -> dict:
-    """
-    Collect user input dynamically for the carbon prediction chatbot.
-    """
-    print("Welcome to the Carbon Footprint Prediction Chatbot!")
-    print("Please answer the following questions to get actionable suggestions to reduce your carbon footprint.\n")
-
-    user_data = {
-        "Body Type": input("What is your body type (e.g., Average, Slim, Overweight)? ").strip(),
-        "Sex": input("What is your sex (e.g., Male, Female)? ").strip(),
-        "Diet": input("What is your diet (e.g., Vegetarian, Non-Vegetarian, Vegan)? ").strip(),
-        "How Often Shower": input("How often do you shower (e.g., Daily, Weekly)? ").strip(),
-        "Heating Energy Source": input("What is your heating energy source (e.g., Electricity, Gas, Oil)? ").strip(),
-        "Transport": input("What is your primary mode of transport (e.g., Car, Public Transport, Bicycle, Walk)? ").strip(),
-    }
-
-    # Ask for car type only if the user uses a car
-    if user_data["Transport"].lower() == "car":
-        user_data["Vehicle Type"] = input("If you use a car, what type is it (e.g., SUV, Sedan, Hatchback)? ").strip()
-
-    user_data.update({
-        "Social Activity": input("How would you describe your social activity level (e.g., High, Medium, Low)? ").strip(),
-        "Monthly Grocery Bill": get_valid_numeric_input("What is your monthly grocery bill (e.g., 200-300)? "),
-        "Frequency of Traveling by Air": input("How often do you travel by air (e.g., Rarely, Frequently)? ").strip(),
-        "Vehicle Monthly Distance Km": get_valid_numeric_input("How many kilometers do you drive monthly (e.g., 500-1000)? "),
-        "Waste Bag Size": input("What is the size of your waste bags (e.g., Small, Medium, Large)? ").strip(),
-        "Waste Bag Weekly Count": get_valid_numeric_input("How many waste bags do you dispose of weekly (e.g., 2, 3)? "),
-        "How Long TV PC Daily Hour": get_valid_numeric_input("How many hours do you spend on TV/PC daily (e.g., 4-6)? "),
-        "How Many New Clothes Monthly": get_valid_numeric_input("How many new clothes do you buy monthly (e.g., 2-3)? "),
-        "How Long Internet Daily Hour": get_valid_numeric_input("How many hours do you spend on the internet daily (e.g., 4-6)? "),
-        "Energy efficiency": input("How would you rate your home's energy efficiency (e.g., High, Medium, Low)? ").strip(),
-        "Recycling": input("How often do you recycle (e.g., Always, Sometimes, Never)? ").strip(),
-        "Cooking_With": input("What is your primary cooking energy source (e.g., Electricity, Gas)? ").strip(),
-    })
-
-    return user_data
-
-
-if __name__ == "__main__":
-    # Collect user input
-    user_data = get_user_input()
-
-    # Initialize the CarbonPredictionService
-    service = CarbonPredictionService()
-
-    # Predict carbon emission and generate suggestions
-    result = service.predict_carbon_emission(user_data)
-
-    # Convert yearly prediction to monthly
-    monthly_prediction = result['prediction']
-
-    # Display the results
-    print(f"\nPredicted Carbon Emission: {monthly_prediction:.2f} kg CO2/month")
-
-    # Check if suggestions are valid and display them
-    if result['suggestions'] and len(result['suggestions'].strip()) > 0:
-        print("\nSuggestions:")
-        print("Here are actionable suggestions to help you reduce your carbon footprint, focusing on areas where you can make the biggest impact:\n")
-        print(result['suggestions'])
-    else:
-        print("\nNo actionable suggestions could be generated at this time. Please try again later.")

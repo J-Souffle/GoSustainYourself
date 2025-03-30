@@ -13,7 +13,7 @@ urlpatterns = [
     
     # Recycling paths
     path("predict_recycle_page/", views.predict_recycle_view, name="predict_recycle_page"),
-    path("api/predict_recycle/", views.predict_recycle, name="predict_recycle_api"),
+    path('predict_recycle/', views.predict_recycle, name='predict_recycle'),
     
     # Other pages
     path("about/", views.about, name="about"),
