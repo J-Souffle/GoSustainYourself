@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gosustainyourself   
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+      - key: DEBUG
+        value: "False"
