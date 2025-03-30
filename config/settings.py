@@ -23,10 +23,6 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-]
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
     'gosustainyourself.onrender.com',  # Render's default domain
     'gosustainyourself.com',              # Your custom domain
     'www.gosustainyourself.com'
@@ -137,10 +133,6 @@ AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
 
 AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://localhost:3000/callback/")
 
-print("AUTH0_DOMAIN:", AUTH0_DOMAIN)
-print("AUTH0_CLIENT_ID:", AUTH0_CLIENT_ID)
-print("AUTH0_CLIENT_SECRET:", AUTH0_CLIENT_SECRET)
-print("AUTH0_CALLBACK_URL:", AUTH0_CALLBACK_URL)
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # For development only
 SESSION_COOKIE_SAMESITE = 'Lax'  # Helps with Auth0 redirects
@@ -165,7 +157,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'gosustainyourself','static')]
+STATIC_ROOT = os.path.join(BASE_DIR,'gosustainyourself', 'staticfiles')
 
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
