@@ -20,7 +20,9 @@ def get_gemini_explanation(prediction_result, image_path=None):
     confidence = prediction_result.get("confidence", 0)
 
     # Use hardcoded API key directly as a fallback
-    api_key = "AIzaSyA6rPOBgOhvIKg1rduUVRCUzOoGUXUUBKs"
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is not set in the environment variables.")
     
     # Build the Gemini API url with the API key
     gemini_api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"

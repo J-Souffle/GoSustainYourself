@@ -1,46 +1,67 @@
 {% extends "layout.html" %}
+{% load static %}
 
 {% block title %}Predict Recyclability{% endblock %}
 
+{% block hero_background %}{% static "images/hero-recycle.jpeg" %}{% endblock hero_background %}
+
 {% block hero_content %}
-<div class="container mt-5">
-  <h1 class="display-4 text-center mb-4">Predict Recyclability</h1>
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'predict_recycle' %}">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="file" class="form-label">Select an Image</label>
-          <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
-        </div>
-        <button type="submit" class="btn btn-success w-100">Upload and Predict</button>
-      </form>
-      <div id="result" class="mt-4"></div>
+  <div class="container mt-5">
+    <h1 class="display-4 text-center mb-4 text-white">
+      <span id="typedTitle"></span>
+    </h1>
+    <!-- Added description to explain what this page does -->
+    <p class="lead text-center mb-5 text-white">
+      Enter your image to see our AI-powered prediction on whether it is recyclable. Our system analyzes the image and provides a prediction along with a confidence score and explanation.
+    </p>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'predict_recycle' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="file" class="form-label">Select an Image</label>
+            <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Upload and Predict</button>
+        </form>
+        <div id="result" class="mt-4"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const form = document.getElementById('uploadForm');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const response = await fetch(form.action, {
-      method: "POST",
-      body: formData
+  <!-- Include Typed.js from CDN before your custom script -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var typed = new Typed("#typedTitle", {
+        strings: ["Save the Future", "Recyclability Detector"], // First string changed to "Save the Future"
+        typeSpeed: 100,
+        backSpeed: 50,
+        loop: false
+      });
     });
-    const data = await response.json();
-    const resultDiv = document.getElementById('result');
-    if(data.error){
-      resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
-    } else {
-      resultDiv.innerHTML = `
-        <div class="alert alert-success">
-          <p>Prediction: <strong>${data.predicted_label}</strong> with confidence ${data.confidence.toFixed(4)}</p>
-          <p><em>${data.explanation}</em></p>
-        </div>
-      `;
-    }
-  });
-</script>
+
+    // Existing form submission code
+    const form = document.getElementById('uploadForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      const resultDiv = document.getElementById('result');
+      if(data.error){
+        resultDiv.innerHTML = `<div class="alert alert-danger recycling-text">Error: ${data.error}</div>`;
+      } else {
+        resultDiv.innerHTML = `
+          <div class="alert alert-success recycling-text">
+            <p>Prediction: <strong>${data.predicted_label}</strong> with confidence ${data.confidence.toFixed(4)}</p>
+            <p><em>${data.explanation}</em></p>
+          </div>
+        `;
+      }
+    });
+  </script>
 {% endblock hero_content %}
