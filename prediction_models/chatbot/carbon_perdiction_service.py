@@ -1,10 +1,10 @@
 import os
-import pandas as pd
+import pandas as pd #type: ignore
 import numpy as np
 import torch
 from typing import Dict, Union, Any
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor
+from sklearn.preprocessing import StandardScaler #type: ignore
+from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor #type: ignore
 import xgboost as xgb
 import lightgbm as lgb
 import google.generativeai as genai
