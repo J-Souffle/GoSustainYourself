@@ -5,6 +5,7 @@ import mongoengine
 import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=BASE_DIR / '.env')
 TEMPLATE_DIR = os.path.join(BASE_DIR, "gosustainyourself", "templates")
 import environ
 
@@ -15,7 +16,7 @@ environ.Env.read_env()  #
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key-for-development')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
@@ -136,7 +137,7 @@ AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
 AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
 AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
 
-AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://localhost:3000/callback/")
+AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://localhost:8000/callback/")
 
 print("AUTH0_DOMAIN:", AUTH0_DOMAIN)
 print("AUTH0_CLIENT_ID:", AUTH0_CLIENT_ID)
@@ -163,10 +164,11 @@ LOGIN_REDIRECT_URL = '/'
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Explicit session engine
 SESSION_COOKIE_NAME = "gosustain_session"  # Unique cookie name
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'gosustainyourself', 'static')]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
