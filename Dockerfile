@@ -10,7 +10,7 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \
-    libmysqlclient-dev \
+    libmariadb-dev \
     gcc \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
