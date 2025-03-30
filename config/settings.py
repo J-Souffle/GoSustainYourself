@@ -25,8 +25,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'gosustainyourself.onrender.com',  # Render's default domain
-    'gosustainyourself.com',              # Your custom domain
-    'www.gosustainyourself.com'
+    'gosustainyourself.tech',              # Your custom domain
+    'www.gosustainyourself.tech'
 ]
 
 # Application definition
@@ -131,6 +131,7 @@ AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
 AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
 
 AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://localhost:8000/callback/")
+AUTH0_LOGOUT_URL = os.environ.get("AUTH0_LOGOUT_URL", "http://localhost:8000/")
 
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # For development only

@@ -27,8 +27,8 @@ COPY . /app/
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Expose the port for Google Cloud (Cloud Run listens on port 8080)
-EXPOSE 8080
+# Expose the port for Google Cloud (Cloud Run listens on port 8000)
+EXPOSE 8000
 
 # Start the app with Gunicorn
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
