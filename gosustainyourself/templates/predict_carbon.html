@@ -287,6 +287,7 @@
         resultDiv.innerHTML = `
           <h4>Your Carbon Footprint Results</h4>
           <p>Estimated Carbon Emission: <strong>${data.prediction.toFixed(2)} kg CO2/year</strong></p>
+          <h4> Google Gemini's Chat bot sugguest you:</h4>
           <p class="mb-0">${data.suggestions.replace(/\n/g, '<br>')}</p>
         `;
         resultDiv.style.display = 'block';
