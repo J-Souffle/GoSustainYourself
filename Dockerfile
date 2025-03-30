@@ -15,8 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy and install requirements
+# Copy only requirements file to leverage Docker cache
 COPY requirements.txt /app/
+
+# Install Python dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the rest of the code
