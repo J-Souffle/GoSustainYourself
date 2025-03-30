@@ -1,11 +1,11 @@
 import os
-import pandas as pd
+import pandas as pd #type: ignore
 import numpy as np
 from typing import Dict, Union, Any
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.preprocessing import StandardScalern #type: ignore
+from sklearn.ensemble import HistGradientBoostingRegressor #type: ignore
 import google.generativeai as genai
-from django.conf import settings
+from django.conf import settings #type: ignore
 
 
 class CarbonPredictionService:
