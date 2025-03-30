@@ -3,7 +3,6 @@ venv/
 .venv/
 ENV/
 env/
-
 # Python cache and compiled files
 __pycache__/
 *.py[cod]
@@ -44,3 +43,6 @@ build/
 dist/
 *.egg-info/
 *.egg
+
+# Data
+recycle_computer_vision/data/
