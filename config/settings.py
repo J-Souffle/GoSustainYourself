@@ -24,9 +24,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'gosustainyourself.onrender.com',  # Render's default domain
+    'gosustainyourself.onrender.com',  # Render 's default domain
     'gosustainyourself.tech',              # Your custom domain
     'www.gosustainyourself.tech'
+    'https://gosustainyourself-496911025175.us-east4.run.app'
 ]
 
 # Application definition
