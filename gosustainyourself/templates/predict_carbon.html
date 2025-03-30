@@ -5,10 +5,10 @@
   <div class="hero-overlay">
     <div class="container text-center hero-content mt-5 pt-5">
       <h1 class="text-light display-4 animate__animated animate__fadeInDown">
-        Predict Your Carbon Footprint
+        Carbon Footprint Calculator
       </h1>
       <p class="text-light lead animate__animated animate__fadeInUp">
-        Upload your data to estimate your carbon emissions and get actionable insights.
+        Answer these questions to estimate your carbon emissions and get personalized suggestions.
       </p>
     </div>
   </div>
@@ -16,34 +16,298 @@
 {% endblock hero %}
 
 {% block content %}
-<div class="container mt-5">
-  <h2 class="text-center mb-4">Carbon Footprint Prediction</h2>
-  <form id="carbonForm" method="post" enctype="multipart/form-data" action="{% url 'carbon_footprint' %}">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="file" class="form-label">Upload your data file (.csv or .xlsx):</label>
-      <input type="file" class="form-control" id="file" name="file" accept=".csv, .xlsx" required>
+<div class="container mt-5 mb-5">
+  <div class="card shadow">
+    <div class="card-header bg-success text-white">
+      <h2 class="text-center mb-0">Your Carbon Footprint Profile</h2>
     </div>
-    <button type="submit" class="btn btn-success w-100">Upload and Predict</button>
-  </form>
-  <div id="result" class="mt-4"></div>
+    <div class="card-body">
+      <form id="carbonForm" method="post" action="{% url 'predict_carbon_api' %}">
+        {% csrf_token %}
+        
+        <!-- Personal Information Section -->
+        <div class="mb-4">
+          <h4 class="border-bottom pb-2">Personal Information</h4>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="body_type" class="form-label">Body Type</label>
+              <select class="form-select" id="body_type" name="body_type" required>
+                <option value="Average">Average</option>
+                <option value="Slim">Slim</option>
+                <option value="Overweight">Overweight</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Sex</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="sex" id="male" value="Male" required>
+                  <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="sex" id="female" value="Female">
+                  <label class="form-check-label" for="female">Female</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="diet" class="form-label">Diet</label>
+              <select class="form-select" id="diet" name="diet" required>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Non-Vegetarian">Non-Vegetarian</option>
+                <option value="Vegan">Vegan</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="social_activity" class="form-label">Social Activity Level</label>
+              <select class="form-select" id="social_activity" name="social_activity" required>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Daily Habits Section -->
+        <div class="mb-4">
+          <h4 class="border-bottom pb-2">Daily Habits</h4>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="shower_frequency" class="form-label">How Often Do You Shower?</label>
+              <select class="form-select" id="shower_frequency" name="shower_frequency" required>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Twice a week">Twice a week</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="tv_pc_hours" class="form-label">Daily TV/PC Hours</label>
+              <input type="number" class="form-control" id="tv_pc_hours" name="tv_pc_hours" min="0" max="24" required>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="internet_hours" class="form-label">Daily Internet Hours</label>
+              <input type="number" class="form-control" id="internet_hours" name="internet_hours" min="0" max="24" required>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="new_clothes" class="form-label">New Clothes Purchased Monthly</label>
+              <input type="number" class="form-control" id="new_clothes" name="new_clothes" min="0" required>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Transportation Section -->
+        <div class="mb-4">
+          <h4 class="border-bottom pb-2">Transportation</h4>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="transport" class="form-label">Primary Transportation</label>
+              <select class="form-select" id="transport" name="transport" required>
+                <option value="Car">Car</option>
+                <option value="Public Transport">Public Transport</option>
+                <option value="Bicycle">Bicycle</option>
+                <option value="Walk">Walk</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3" id="vehicleTypeContainer" style="display:none;">
+              <label for="vehicle_type" class="form-label">Vehicle Type</label>
+              <select class="form-select" id="vehicle_type" name="vehicle_type">
+                <option value="SUV">SUV</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Hatchback">Hatchback</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="vehicle_distance" class="form-label">Monthly Distance (km)</label>
+              <input type="number" class="form-control" id="vehicle_distance" name="vehicle_distance" min="0" required>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="air_travel" class="form-label">Frequency of Air Travel</label>
+              <select class="form-select" id="air_travel" name="air_travel" required>
+                <option value="Rarely">Rarely</option>
+                <option value="Occasionally">Occasionally</option>
+                <option value="Frequently">Frequently</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Energy & Waste Section -->
+        <div class="mb-4">
+          <h4 class="border-bottom pb-2">Energy & Waste</h4>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="heating_source" class="form-label">Heating Energy Source</label>
+              <select class="form-select" id="heating_source" name="heating_source" required>
+                <option value="Electricity">Electricity</option>
+                <option value="Gas">Gas</option>
+                <option value="Oil">Oil</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="energy_efficiency" class="form-label">Home Energy Efficiency</label>
+              <select class="form-select" id="energy_efficiency" name="energy_efficiency" required>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="cooking_source" class="form-label">Cooking Energy Source</label>
+              <select class="form-select" id="cooking_source" name="cooking_source" required>
+                <option value="Electricity">Electricity</option>
+                <option value="Gas">Gas</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="grocery_bill" class="form-label">Monthly Grocery Bill ($)</label>
+              <input type="number" class="form-control" id="grocery_bill" name="grocery_bill" min="0" step="10" required>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Waste Management Section -->
+        <div class="mb-4">
+          <h4 class="border-bottom pb-2">Waste Management</h4>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="waste_bag_size" class="form-label">Waste Bag Size</label>
+              <select class="form-select" id="waste_bag_size" name="waste_bag_size" required>
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="waste_bag_count" class="form-label">Waste Bags Per Week</label>
+              <input type="number" class="form-control" id="waste_bag_count" name="waste_bag_count" min="0" required>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="recycling" class="form-label">Recycling Frequency</label>
+            <select class="form-select" id="recycling" name="recycling" required>
+              <option value="Always">Always</option>
+              <option value="Sometimes">Sometimes</option>
+              <option value="Never">Never</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-success btn-lg px-5">Calculate My Footprint</button>
+        </div>
+      </form>
+      
+      <div id="result" class="mt-4 alert alert-info" style="display: none;"></div>
+    </div>
+  </div>
+  
+  <div class="text-center mt-4">
+    <p class="text-muted">Did You Know? Small changes in your daily habits can significantly reduce your carbon footprint.</p>
+  </div>
 </div>
 
 <script>
+  // Show vehicle type field only when transport is car
+  document.getElementById('transport').addEventListener('change', function() {
+    const vehicleTypeContainer = document.getElementById('vehicleTypeContainer');
+    vehicleTypeContainer.style.display = this.value === 'Car' ? 'block' : 'none';
+  });
+
+  // Form submission
   const form = document.getElementById('carbonForm');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
-    const response = await fetch(form.action, {
-      method: "POST",
-      body: formData
+    
+    // Convert form data to JSON
+    const formDataObj = {};
+    formData.forEach((value, key) => {
+      formDataObj[key] = value;
     });
-    const data = await response.json();
-    const resultDiv = document.getElementById('result');
-    if (data.error) {
-      resultDiv.innerHTML = `<p class="text-danger">Error: ${data.error}</p>`;
-    } else {
-      resultDiv.innerHTML = `<p class="text-success">Prediction: <strong>${data.predicted_value}</strong> kg CO2 with confidence ${data.confidence.toFixed(4)}</p>`;
+    
+    // Add proper field names that match your model
+    const userData = {
+      "Body Type": formDataObj['body_type'],
+      "Sex": formDataObj['sex'],
+      "Diet": formDataObj['diet'],
+      "How Often Shower": formDataObj['shower_frequency'],
+      "Heating Energy Source": formDataObj['heating_source'],
+      "Transport": formDataObj['transport'],
+      "Vehicle Type": formDataObj['transport'] === 'Car' ? formDataObj['vehicle_type'] : 'None',
+      "Social Activity": formDataObj['social_activity'],
+      "Monthly Grocery Bill": parseFloat(formDataObj['grocery_bill']),
+      "Frequency of Traveling by Air": formDataObj['air_travel'],
+      "Vehicle Monthly Distance Km": parseFloat(formDataObj['vehicle_distance']),
+      "Waste Bag Size": formDataObj['waste_bag_size'],
+      "Waste Bag Weekly Count": parseInt(formDataObj['waste_bag_count']),
+      "How Long TV PC Daily Hour": parseFloat(formDataObj['tv_pc_hours']),
+      "How Many New Clothes Monthly": parseInt(formDataObj['new_clothes']),
+      "How Long Internet Daily Hour": parseFloat(formDataObj['internet_hours']),
+      "Energy efficiency": formDataObj['energy_efficiency'],
+      "Recycling": formDataObj['recycling'],
+      "Cooking_With": formDataObj['cooking_source']
+    };
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': formDataObj['csrfmiddlewaretoken']
+        },
+        body: JSON.stringify(userData)
+      });
+      
+      const data = await response.json();
+      const resultDiv = document.getElementById('result');
+      
+      if (data.error) {
+        resultDiv.innerHTML = `<p class="text-danger">Error: ${data.error}</p>`;
+        resultDiv.style.display = 'block';
+      } else {
+        resultDiv.innerHTML = `
+          <h4>Your Carbon Footprint Results</h4>
+          <p>Estimated Carbon Emission: <strong>${data.prediction.toFixed(2)} kg CO2/year</strong></p>
+          <p class="mb-0">${data.suggestions.replace(/\n/g, '<br>')}</p>
+        `;
+        resultDiv.style.display = 'block';
+        
+        // Scroll to results
+        resultDiv.scrollIntoView({ behavior: 'smooth' });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `<p class="text-danger">An error occurred. Please try again.</p>`;
+      resultDiv.style.display = 'block';
     }
   });
 </script>

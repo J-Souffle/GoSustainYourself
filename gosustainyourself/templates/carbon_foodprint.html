@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+
+{% block hero %}
+<!-- Your existing hero section -->
+{% endblock hero %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="card shadow">
+    <div class="card-header bg-success text-white">
+      <h2 class="text-center mb-0">Your Carbon Footprint Profile</h2>
+    </div>
+    <div class="card-body">
+      {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      
+      {% if result %}
+        <div id="result" class="alert alert-info">
+          <h4>Your Carbon Footprint Results</h4>
+          <p>Estimated Carbon Emission: <strong>{{ result.prediction|floatformat:2 }} kg CO2/year</strong></p>
+          <p class="mb-0">{{ result.suggestions|linebreaksbr }}</p>
+        </div>
+      {% endif %}
+      
+      <form id="carbonForm" method="post" action="{% url 'predict_carbon' %}">
+        {% csrf_token %}
+        
+        <!-- Your existing form sections -->
+        <!-- Personal Information Section -->
+        <div class="mb-4">
+          <h4 class="border-bottom pb-2">Personal Information</h4>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="body_type" class="form-label">Body Type</label>
+              <select class="form-select" id="body_type" name="body_type" required>
+                {% for type in form_fields.body_types %}
+                  <option value="{{ type }}" {% if form_data.body_type == type %}selected{% endif %}>{{ type }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            
+            <!-- Rest of your form fields with value population -->
+            <!-- Example for radio buttons -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Sex</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="sex" id="male" value="Male" 
+                    {% if not form_data or form_data.sex == "Male" %}checked{% endif %} required>
+                  <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="sex" id="female" value="Female"
+                    {% if form_data.sex == "Female" %}checked{% endif %}>
+                  <label class="form-check-label" for="female">Female</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Continue with all other form fields -->
+          
+        </div>
+        
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-success btn-lg px-5">Calculate My Footprint</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Your existing JavaScript with modifications for Django
+  document.addEventListener('DOMContentLoaded', function() {
+    // Show vehicle type field only when transport is car
+    const transportSelect = document.getElementById('transport');
+    const vehicleTypeContainer = document.getElementById('vehicleTypeContainer');
+    
+    function updateVehicleTypeVisibility() {
+      vehicleTypeContainer.style.display = transportSelect.value === 'Car' ? 'block' : 'none';
+    }
+    
+    transportSelect.addEventListener('change', updateVehicleTypeVisibility);
+    updateVehicleTypeVisibility(); // Initialize visibility
+    
+    // If you want to keep the AJAX submission instead of regular form submission
+    const form = document.getElementById('carbonForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch("{% url 'predict_carbon' %}", {
+          method: "POST",
+          headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+            'Accept': 'application/json',
+          },
+          body: formData
+        });
+        
+        const data = await response.json();
+        const resultDiv = document.getElementById('result');
+        
+        if (data.error) {
+          resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+        } else {
+          resultDiv.innerHTML = `
+            <h4>Your Carbon Footprint Results</h4>
+            <p>Estimated Carbon Emission: <strong>${data.prediction.toFixed(2)} kg CO2/year</strong></p>
+            <p class="mb-0">${data.suggestions.replace(/\n/g, '<br>')}</p>
+          `;
+        }
+        resultDiv.style.display = 'block';
+        resultDiv.scrollIntoView({ behavior: 'smooth' });
+      } catch (error) {
+        console.error('Error:', error);
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = `<div class="alert alert-danger">An error occurred. Please try again.</div>`;
+        resultDiv.style.display = 'block';
+      }
+    });
+  });
+</script>
+{% endblock content %}

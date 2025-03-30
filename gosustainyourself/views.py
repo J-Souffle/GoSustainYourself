@@ -84,13 +84,14 @@ def logout(request):
     )
 @login_required
 def predict_carbon_view(request):
-            """
-            Renders the HTML page that lets a user input data
-            to predict carbon emissions.
-            """
-            return render(request, "predict_carbon.html", context={"session": request.session.get("user")})
+    """Render the carbon prediction form"""
+    return render(request, "predict_carbon.html", context={
+        "session": request.session.get("user")
+    })
+
 @login_required
 def predict_carbon(request):
+    """Handle the form submission"""
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
     
