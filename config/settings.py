@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
-import mongoengine
 import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,8 +92,6 @@ DATABASES = {
     }
 }
 
-import mongoengine
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -139,10 +136,6 @@ AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
 
 AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://localhost:8000/callback/")
 
-print("AUTH0_DOMAIN:", AUTH0_DOMAIN)
-print("AUTH0_CLIENT_ID:", AUTH0_CLIENT_ID)
-print("AUTH0_CLIENT_SECRET:", AUTH0_CLIENT_SECRET)
-print("AUTH0_CALLBACK_URL:", AUTH0_CALLBACK_URL)
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # For development only
 SESSION_COOKIE_SAMESITE = 'Lax'  # Helps with Auth0 redirects
