@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from tempfile import NamedTemporaryFile
 from prediction_models.carbon_prediction_service import CarbonPredictionService
 from recycle_computer_vision.recycle_predictor import predict_recyclable_image
+from django.contrib.auth import get_user_model, login as django_login
 
 oauth = OAuth()
 oauth.register(
@@ -48,21 +49,33 @@ def login(request):
 def callback(request):
     try:
         token = oauth.auth0.authorize_access_token(request)
-        request.session["user"] = token
-        return redirect("index")
+        userinfo = token.get("userinfo")
+        
+        # Get or create a Django user
+        email = userinfo["email"]
+        User = get_user_model()
+        user, _ = User.objects.get_or_create(username=email, defaults={"email": email})
+        
+        # Log in with Django’s session
+        django_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        
+        # Optional: store entire token in session if needed
+        request.session["auth0_token"] = token
+        return redirect("home")
     except Exception as e:
         print(f"Auth0 callback error: {str(e)}")
         return redirect("login")
 
 
 def logout(request):
-    # Clear the session and redirect to Auth0 logout endpoint.
+    # Clear local session
     request.session.clear()
+    # Redirect to Auth0 logout
     return redirect(
         f"https://{settings.AUTH0_DOMAIN}/v2/logout?"
         + urlencode(
             {
-                "returnTo": request.build_absolute_uri(reverse("index")),
+                "returnTo": request.build_absolute_uri(reverse("home")), 
                 "client_id": settings.AUTH0_CLIENT_ID,
             },
             quote_via=quote_plus,
@@ -124,3 +137,23 @@ def recycle_upload(request):
     to predict whether it is recyclable.
     """
     return render(request, "predict_recycle.html")
+
+def home(request):
+    """
+    Renders the home page with a welcome message.
+    """
+    return render(request, "home.html", context={"session": request.session.get("user")})
+
+
+
+def about(request):
+    """
+    Renders the about page.
+    """
+    return render(request, "about.html", context={"session": request.session.get("user")})
+
+def messages(request):
+    """
+    Renders the messages page.
+    """
+    return render(request, "messages.html", context={"session": request.session.get("user")})
