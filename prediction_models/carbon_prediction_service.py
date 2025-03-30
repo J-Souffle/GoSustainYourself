@@ -17,7 +17,7 @@ class CarbonPredictionService:
         
         # Configure Gemini API
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        self.model_gemini = genai.GenerativeModel('gemini-pro')
+        self.model_gemini = genai.GenerativeModel('gemini-2.0-flash')
         
     def _load_and_train_model(self):
         # Load dataset
