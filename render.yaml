@@ -1,10 +1,12 @@
 services:
   - type: web
-    name: gosustainyourself   
+    name: gosustainyourself
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "gunicorn config.wsgi:application"
     envVars:
-      - key: SECRET_KEY
+      - key: SECRET_KEY       # Value set in Render dashboard
       - key: DEBUG
-        value: "False"
+        value: "False"        # Hardcoded for production
+      - key: RENDER           # ← Auto-set by Render (no need to add this)
+        value: "true"

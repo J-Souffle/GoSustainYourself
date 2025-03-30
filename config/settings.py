@@ -171,9 +171,10 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
 
-from dotenv import load_dotenv
-load_dotenv()
+if os.environ.get('RENDER') != 'true':  # Render sets this automatically
+    load_dotenv()
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')  # Works both locally and on Render
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'  # Default to False
 
 
