@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recycle Image Prediction</title>
+</head>
+<body>
+    <h1>Predict Recyclability</h1>
+    <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'predict_recycle' %}">
+        {% csrf_token %}
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload and Predict</button>
+    </form>
+    <div id="result" style="margin-top:20px;"></div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            const resultDiv = document.getElementById('result');
+            if(data.error){
+                resultDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+            } else {
+                resultDiv.innerHTML = `<p>Prediction: <strong>${data.predicted_label}</strong> with confidence ${data.confidence.toFixed(4)}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

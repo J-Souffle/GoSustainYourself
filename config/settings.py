@@ -15,8 +15,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key-for-de
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -28,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'gosustainyourself.apps.GosustainyourselfConfig',
+    'django_bootstrap5'
 ]
 
 MIDDLEWARE = [
@@ -38,6 +43,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     
 ]
 
@@ -131,15 +139,24 @@ if ENV_FILE:
 AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
 AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
 AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+AUTH0_CALLBACK_URL = os.environ.get("AUTH0_CALLBACK_URL", "http://127.0.0.1:8000/callback/")
 print("AUTH0_DOMAIN:", AUTH0_DOMAIN)
 print("AUTH0_CLIENT_ID:", AUTH0_CLIENT_ID)
 print("AUTH0_CLIENT_SECRET:", AUTH0_CLIENT_SECRET)
+print("AUTH0_CALLBACK_URL:", AUTH0_CALLBACK_URL)
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # For development only
 SESSION_COOKIE_SAMESITE = 'Lax'  # Helps with Auth0 redirects
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SECURE = True   # Change to True in production
 CSRF_COOKIE_SECURE = True     # Change to True in production
-AUTH0_CALLBACK_URL = "http://localhost:8000/callback/" 
+
+# For local development with HTTP
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = None
+CSRF_COOKIE_SAMESITE = None
+
 AUTH0_SUCCESS_URL = "/"
 LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/'
@@ -151,10 +168,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-]
 
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
