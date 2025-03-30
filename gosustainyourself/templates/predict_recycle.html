@@ -1,46 +1,49 @@
 {% extends "layout.html" %}
+{% load static %}
 
 {% block title %}Predict Recyclability{% endblock %}
 
+{% block hero_background %}{% static "images/hero-recycle.jpeg" %}{% endblock hero_background %}
+
 {% block hero_content %}
-<div class="container mt-5">
-  <h1 class="display-4 text-center mb-4">Predict Recyclability</h1>
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'predict_recycle' %}">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="file" class="form-label">Select an Image</label>
-          <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
-        </div>
-        <button type="submit" class="btn btn-success w-100">Upload and Predict</button>
-      </form>
-      <div id="result" class="mt-4"></div>
+  <div class="container mt-5">
+    <h1 class="display-4 text-center mb-4">Predict Recyclability</h1>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'predict_recycle' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="file" class="form-label">Select an Image</label>
+            <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Upload and Predict</button>
+        </form>
+        <div id="result" class="mt-4"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const form = document.getElementById('uploadForm');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const response = await fetch(form.action, {
-      method: "POST",
-      body: formData
+  <script>
+    const form = document.getElementById('uploadForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      const resultDiv = document.getElementById('result');
+      if(data.error){
+        resultDiv.innerHTML = `<div class="alert alert-danger text-white recycling-text">Error: ${data.error}</div>`;
+      } else {
+        resultDiv.innerHTML = `
+          <div class="alert alert-success text-white recycling-text">
+            <p>Prediction: <strong>${data.predicted_label}</strong> with confidence ${data.confidence.toFixed(4)}</p>
+            <p><em>${data.explanation}</em></p>
+          </div>
+        `;
+      }
     });
-    const data = await response.json();
-    const resultDiv = document.getElementById('result');
-    if(data.error){
-      resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
-    } else {
-      resultDiv.innerHTML = `
-        <div class="alert alert-success">
-          <p>Prediction: <strong>${data.predicted_label}</strong> with confidence ${data.confidence.toFixed(4)}</p>
-          <p><em>${data.explanation}</em></p>
-        </div>
-      `;
-    }
-  });
-</script>
+  </script>
 {% endblock hero_content %}
