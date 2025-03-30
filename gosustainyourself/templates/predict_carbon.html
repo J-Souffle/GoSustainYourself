@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block hero %}
+<section class="hero">
+  <div class="hero-overlay">
+    <div class="container text-center hero-content mt-5 pt-5">
+      <h1 class="text-light display-4 animate__animated animate__fadeInDown">
+        Predict Your Carbon Footprint
+      </h1>
+      <p class="text-light lead animate__animated animate__fadeInUp">
+        Upload your data to estimate your carbon emissions and get actionable insights.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock hero %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Carbon Footprint Prediction</h2>
+  <form id="carbonForm" method="post" enctype="multipart/form-data" action="{% url 'carbon_footprint' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="file" class="form-label">Upload your data file (.csv or .xlsx):</label>
+      <input type="file" class="form-control" id="file" name="file" accept=".csv, .xlsx" required>
+    </div>
+    <button type="submit" class="btn btn-success w-100">Upload and Predict</button>
+  </form>
+  <div id="result" class="mt-4"></div>
+</div>
+
+<script>
+  const form = document.getElementById('carbonForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: formData
+    });
+    const data = await response.json();
+    const resultDiv = document.getElementById('result');
+    if (data.error) {
+      resultDiv.innerHTML = `<p class="text-danger">Error: ${data.error}</p>`;
+    } else {
+      resultDiv.innerHTML = `<p class="text-success">Prediction: <strong>${data.predicted_value}</strong> kg CO2 with confidence ${data.confidence.toFixed(4)}</p>`;
+    }
+  });
+</script>
+{% endblock content %}

@@ -82,7 +82,13 @@ def logout(request):
             quote_via=quote_plus,
         )
     )
-
+@login_required
+def predict_carbon_view(request):
+            """
+            Renders the HTML page that lets a user input data
+            to predict carbon emissions.
+            """
+            return render(request, "predict_carbon.html", context={"session": request.session.get("user")})
 @login_required
 def predict_carbon(request):
     if request.method != 'POST':
@@ -94,7 +100,7 @@ def predict_carbon(request):
         return JsonResponse(result)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
-
+        
 @login_required
 def predict_recycle_view(request):
     """
