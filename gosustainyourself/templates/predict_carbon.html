@@ -10,6 +10,10 @@
       <p class="text-light lead animate__animated animate__fadeInUp">
         Answer these questions to estimate your carbon emissions and get personalized suggestions.
       </p>
+      <!-- Green button to scroll to the form -->
+      <a href="#carbonForm" class="btn btn-success btn-lg mt-5" style="color: white; font-weight: bold; display: inline-block;">
+        Predict your carbon emission!
+      </a>
     </div>
   </div>
 </section>
@@ -51,26 +55,6 @@
                   <label class="form-check-label" for="female">Female</label>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="diet" class="form-label">Diet</label>
-              <select class="form-select" id="diet" name="diet" required>
-                <option value="Vegetarian">Vegetarian</option>
-                <option value="Non-Vegetarian">Non-Vegetarian</option>
-                <option value="Vegan">Vegan</option>
-              </select>
-            </div>
-            
-            <div class="col-md-6 mb-3">
-              <label for="social_activity" class="form-label">Social Activity Level</label>
-              <select class="form-select" id="social_activity" name="social_activity" required>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
             </div>
           </div>
         </div>
@@ -239,6 +223,13 @@
   document.getElementById('transport').addEventListener('change', function() {
     const vehicleTypeContainer = document.getElementById('vehicleTypeContainer');
     vehicleTypeContainer.style.display = this.value === 'Car' ? 'block' : 'none';
+  });
+
+  // Smooth scrolling for the button
+  document.querySelector('a[href="#carbonForm"]').addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    target.scrollIntoView({ behavior: 'smooth' });
   });
 
   // Form submission
